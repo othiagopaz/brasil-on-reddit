@@ -11,8 +11,12 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(asctime)s - %(m
 
 def authenticate():
     logging.info("Authenticating...")
-    reddit = praw.Reddit('OnReddit', user_agent=USER_AGENT)
-    logging.info("Authenticated as {}".format(reddit.user.me()))
+    try:
+        reddit = praw.Reddit('OnReddit', user_agent=USER_AGENT)
+        logging.info("Authenticated as {}".format(reddit.user.me()))
+    except Exception as e:
+        logging.error("Failed to authenticate: {}".format(e))
+        sys.exit(1)
     return reddit
 
 
@@ -39,16 +43,17 @@ def process_submission(reddit, submission):
 
 
 def new_post(subreddit, title, url, source_url):
-    if POST_MODE == 'direct':
-        post = subreddit.submit(title, url=url)
-        comment_text = "[Link to original post here]({})".format(source_url)
-        post.reply(comment_text).mod.distinguish(sticky=True)
-
-    elif POST_MODE == 'comment':
-        subreddit.submit(title, url=source_url)
-
-    else:
-        logging.ERROR('Invalid POST_MODE chosen. Select "direct" or "comment".')
+    try:
+        if POST_MODE == 'direct':
+            post = subreddit.submit(title, url=url)
+            comment_text = "[Link to original post here]({})".format(source_url)
+            post.reply(comment_text).mod.distinguish(sticky=True)
+        elif POST_MODE == 'comment':
+            subreddit.submit(title, url=source_url)
+        else:
+            logging.error('Invalid POST_MODE chosen. Select "direct" or "comment".')
+    except Exception as e:
+        logging.error("Failed to create new post: {}".format(e))
 
 def is_blacklisted(title):
     is_black = False

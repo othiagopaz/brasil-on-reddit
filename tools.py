@@ -9,8 +9,12 @@ import matplotlib.pyplot as plt
 
 def authenticate():
     print("Authenticating...")
-    reddit = praw.Reddit('OnReddit', user_agent='BrasilOnReddit v0.1')
-    print("Authenticated as {}".format(reddit.user.me()))
+    try:
+        reddit = praw.Reddit('OnReddit', user_agent='BrasilOnReddit v0.1')
+        print("Authenticated as {}".format(reddit.user.me()))
+    except Exception as e:
+        print("Failed to authenticate: {}".format(e))
+        sys.exit(1)
     return reddit
 
 
