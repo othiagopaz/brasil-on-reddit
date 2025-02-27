@@ -24,6 +24,7 @@ def authenticate():
 
 
 def process_submission(reddit, submission):
+    # this function is used to process the submission
     title = submission.title  # Submission's title
     url = submission.url  # Submission's url
     xpost = "[r/{}] ".format(
