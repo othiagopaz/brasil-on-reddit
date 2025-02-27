@@ -81,6 +81,7 @@ def is_blacklisted(title):
 
 
 def monitor(reddit, submissions_found):
+    # this function is used to monitor the submissions
     counter = 0
     for submission in reddit.subreddit(SUBREDDITS_TO_MONITOR).hot(limit=SEARCH_LIMIT):
         for expression in EXPRESSIONS_TO_MONITOR:
