@@ -68,6 +68,7 @@ def new_post(subreddit, title, url, source_url):
 
 
 def is_blacklisted(title):
+    # this function is used to check if the submission is blacklisted
     is_black = False
 
     for ignored in BLACKLIST:
